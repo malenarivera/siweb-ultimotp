@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+SQLAlchemy
+asyncpg
+pydantic[email]
+python-jose[cryptography]
+httpx

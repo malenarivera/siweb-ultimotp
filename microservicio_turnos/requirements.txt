@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pymongo
+beanie
+python-jose[cryptography]
+httpx
