@@ -1,0 +1,25 @@
+name: Crear y Publicar imagen en Docker Image, pero del MS Pacientes
+on:
+  push:
+    branches:
+     - main
+    paths:
+     - 'microservicio_pacientes/**'
+  pull_request:
+    branches:
+      - main
+    paths: 
+      - 'microservicio_pacientes/**'
+
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: build image
+      run:  docker build ./microservicio_pacientes/ -t laraacuna/microservicio-pacientes:latest
+    - name: publish image
+      run: |
+        docker login -u laraacuna -p ${{ secrets.DOCKER_HUB_TOKEN }}
+        docker push laraacuna/microservicio-pacientes:latest
