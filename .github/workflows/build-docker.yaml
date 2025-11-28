@@ -1,0 +1,21 @@
+name: Crear y Publicar imagen en Docker Image
+on:
+  push:
+    branches:
+     - main
+  pull-request:
+    branches:
+      - main
+
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: build image
+      run:  docker build ./microservicio_medicamentos/ -t laraacuna/microservicio-medicamentos:latest
+    - name: publish image
+      run: |
+        docker login -u laraacuna -p ${{ secrets.DOCKER_HUB_TOKEN }}
+        docker push laraacuna/microservicio-medicamentos:latest
