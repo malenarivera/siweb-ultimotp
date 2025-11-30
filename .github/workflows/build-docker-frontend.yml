@@ -17,6 +17,11 @@ jobs:
     steps: 
     - name: checkout
       uses: actions/checkout@v4
+    - name: clean state
+      run: |
+        rm package-lock.json
+        rm -rf node_modules
+      working-directory: frontend
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
