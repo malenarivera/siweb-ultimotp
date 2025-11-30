@@ -1,0 +1,25 @@
+name: Crear y Publicar imagen en Docker Image, para el MS de usuarios
+on:
+  push:
+    branches:
+     - main
+    paths: 
+     - 'microservicio_usuarios/**'
+  pull_request:
+    branches:
+      - main
+    paths: 
+     - 'microservicio_usuarios/**'
+
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: build image
+      run:  docker build ./microservicio_usuarios/ -t laraacuna/microservicio-usuarios:latest
+    - name: publish image
+      run: |
+        docker login -u laraacuna -p ${{ secrets.DOCKER_HUB_TOKEN }}
+        docker push laraacuna/microservicio-usuarios:latest
