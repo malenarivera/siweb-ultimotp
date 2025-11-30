@@ -1,4 +1,4 @@
-name: Crear y Publicar imagen en Docker Image, para el MS de medicamentos
+name: Crear y Publicar imagen en Docker Image, para el Frontend
 on:
   push:
     branches:
