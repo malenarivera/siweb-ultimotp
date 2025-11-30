@@ -147,7 +147,8 @@ export default function CrearEvolucion({goBack, evoluciones, setEvoluciones, id_
                             </label>
                         </div>
                         <textarea 
-                            id="observacion" 
+                            id="observacion"
+                            data-testid="observacion"
                             name="observacion" 
                             type="text"
                             required
@@ -161,16 +162,16 @@ export default function CrearEvolucion({goBack, evoluciones, setEvoluciones, id_
                             placeholder="Ingrese la Observacion de la evolucion..."
                         ></textarea>
                         { validationErrors.some(error => error.campo === "observacion") && (
-                            <p id="observacion-error" className="text-red-500 text-sm mt-1">
+                            <p data-testid="observacion-error" id="observacion-error" className="text-red-500 text-sm mt-1">
                             {validationErrors[validationErrors.findIndex(error => error.campo === "observacion")].msg}
                             </p>
                         )}
                     </div>
                     <div>
                         <label htmlFor="cargarMultiaxial" className="text-md font-medium text-gris-oscuro">Cargar Diagnostico Multiaxial?</label>
-                        <input className="ml-2 h-4 w-4" type="checkbox" id="cargarMultiaxial" checked={addMultiaxial} onChange={handleMultiaxialCheck}></input>
+                        <input className="ml-2 h-4 w-4" type="checkbox" id="cargarMultiaxial" data-testid="cargarMultiaxial" checked={addMultiaxial} onChange={handleMultiaxialCheck}></input>
                     </div>
-                    <div className={`bg-white transition-all duration-300 ease-in-out overflow-hidden ${addMultiaxial ? 'max-h-[800px] opacity-100 p-4' : 'max-h-0 opacity-0 p-0'}`}>
+                    <div data-testid="divMultiaxial" className={`bg-white transition-all duration-300 ease-in-out overflow-hidden ${addMultiaxial ? 'max-h-[800px] opacity-100 p-4' : 'max-h-0 opacity-0 p-0'}`}>
                         <div className="prose prose-sm text-gray-800 whitespace-pre-line">
                             <div className="w-full">
                                 <label htmlFor="id_item1" className="block text-sm font-medium text-gray-700 mb-1 uppercase">
@@ -361,7 +362,7 @@ export default function CrearEvolucion({goBack, evoluciones, setEvoluciones, id_
                 </div>
                 </form>
             </div>
-            <div id="confirmacion" className={`overflow-hidden ${pedirConfirmacion && !mostrarResultado ? '' : 'max-h-0'}`}>
+            <div id="confirmacion" data-testid="confirmacion" className={`overflow-hidden ${pedirConfirmacion && !mostrarResultado ? '' : 'max-h-0'}`}>
                 <div className="w-full">
                     <h2 className="text-xl font-semibold text-gris-oscuro mb-4 text-center">
                         Esta seguro de que desea cargar esta evolucion?
