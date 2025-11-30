@@ -24,7 +24,7 @@ export default function CrearEvolucion({goBack, evoluciones, setEvoluciones, id_
     }
     const [formData, setFormData] = useState(initialFormState);
     const [validationErrors, setValidationErrors] = useState<{campo: string, msg: string}[]>([]); // Agregar este estado para manejar los mensajes de error
-    const [addMultiaxial, setAddMultiaxial] = useState(true); //originalmente false
+    const [addMultiaxial, setAddMultiaxial] = useState(false); //volvemos a false para que los tests den bien
 
     const handleMultiaxialCheck = async () => {
         const agregaMultiaxial = !addMultiaxial;
