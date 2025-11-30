@@ -1,0 +1,285 @@
+{
+  "navbar": {
+    "logo": "CRZ",
+    "menus": {
+      "historiaClinica": "HISTORIA CLÍNICA",
+      "turnos": "TURNOS",
+      "medicamentos": "MEDICAMENTOS",
+      "personal": "PERSONAL"
+    },
+    "submenus": {
+      "historiaClinica": {
+        "crearPaciente": "Crear Paciente",
+        "buscarPaciente": "Buscar Paciente",
+        "generarReporte": "Generar Reporte"
+      },
+      "turnos": {
+        "gestionarTurnos": "Gestionar Turnos",
+        "calendario": "Calendario"
+      },
+      "medicamentos": {
+        "inventario": "Inventario",
+        "recetas": "Recetas"
+      },
+      "personal": {
+        "gestionarPersonal": "Gestionar Personal",
+        "horarios": "Horarios",
+        "cerrarSesion": "Cerrar Sesión"
+      }
+    }
+  },
+  "content": {
+    "welcome": "Bienvenido, Francisco",
+    "date": "Lunes 01/02"
+  },
+  "language": {
+    "selector": "Idioma",
+    "spanish": "Español",
+    "english": "English"
+  },
+  "registerPatient": {
+    "title": "Registrar Paciente",
+    "description": "Ingrese los datos del paciente que desea registrar",
+    "backToHome": "Volver al Inicio",
+    "form": {
+      "title": "Formulario de Registro de Paciente",
+      "successMessage": "Paciente registrado exitosamente",
+      "sections": {
+        "personalInfo": "Información Personal",
+        "medicalInfo": "Información Médica"
+      },
+      "fields": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "document": "Documento",
+        "birthDate": "Fecha de Nacimiento",
+        "phone": "Teléfono",
+        "email": "Email",
+        "address": "Dirección",
+        "gender": "Género",
+        "bloodType": "Tipo de Sangre",
+        "allergies": "Alergias",
+        "medications": "Medicamentos Actuales",
+        "medicalHistory": "Antecedentes Médicos"
+      },
+      "options": {
+        "male": "Masculino",
+        "female": "Femenino",
+        "other": "Otro"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "register": "Registrar Paciente",
+        "save": "Guardar Cambios"
+      },
+      "labels": {
+        "profilePhoto": "Foto de Perfil",
+        "admissionDate": "FECHA DE INGRESO",
+        "personalData": "Datos Personales",
+        "contactData": "Datos de Contacto",
+        "dni": "DNI",
+        "firstName": "NOMBRE/S",
+        "lastName": "APELLIDO",
+        "gender": "GÉNERO",
+        "socialWork": "OBRA SOCIAL",
+        "memberNumber": "NRO SOCIO",
+        "street": "CALLE",
+        "number": "NUM",
+        "floor": "PISO",
+        "apartment": "DPTO",
+        "phone": "TELÉFONO",
+        "email": "EMAIL"
+      },
+      "placeholders": {
+        "enterDni": "Ingrese aquí su DNI",
+        "enterFirstName": "Ingrese aquí su nombre",
+        "enterLastName": "Ingrese aquí su apellido",
+        "selectGender": "Seleccione aquí su género",
+        "selectGenderOption": "Seleccione una opción",
+        "enterSocialWork": "Ingrese aquí su obra social",
+        "enterMemberNumber": "Ingrese aquí su número de socio",
+        "enterStreet": "Ingrese aquí su calle",
+        "enterNumber": "Nro",
+        "enterFloor": "Piso",
+        "enterApartment": "Dpto",
+        "enterPhone": "Ingrese aquí su teléfono",
+        "enterEmail": "Ingrese aquí su email",
+        "enterPhoto": "Ingresar"
+      },
+      "genderOptions": {
+        "male": "Masculino",
+        "female": "Femenino",
+        "other": "Otro"
+      },
+      "messages": {
+        "requiredField": "Campo obligatorio",
+        "optionalField": "Opcional",
+        "dniInstructions": "Ingrese solo números, sin puntos ni comas",
+        "nameInstructions": "Ingrese solo letras",
+        "memberNumberInstructions": "Ingrese solo números",
+        "socialWorkInstructions": "Ingrese solo letras",
+        "patientSavedSuccessfully": "Paciente guardado exitosamente.",
+        "dniRequired": "El campo DNI es obligatorio"
+      },
+      "validation": {
+        "requiredFields": "Por favor complete los siguientes campos obligatorios:",
+        "dniRequired": "El campo DNI es obligatorio",
+        "firstNameRequired": "El campo Nombre es obligatorio",
+        "lastNameRequired": "El campo Apellido es obligatorio",
+        "genderRequired": "El campo Género es obligatorio",
+        "socialWorkRequired": "El campo Obra Social es obligatorio",
+        "memberNumberRequired": "El campo Número de Socio es obligatorio"
+      },
+      "virtualKeyboard": {
+        "title": "Teclado Virtual",
+        "openKeyboard": "Abrir teclado virtual",
+        "saveAndClose": "Guardar y cerrar teclado virtual",
+        "closeWithoutSaving": "Cerrar teclado virtual sin guardar",
+        "save": "Guardar",
+        "close": "Cerrar",
+        "activateCaps": "Activar mayúsculas",
+        "deactivateCaps": "Desactivar mayúsculas",
+        "insertSpace": "Insertar espacio",
+        "deleteLastChar": "Borrar último carácter",
+        "clearField": "Limpiar campo",
+        "insertLetter": "Insertar letra",
+        "insertNumber": "Insertar número"
+      },
+      "modal": {
+        "confirmRegistration": "Confirmar Registro",
+        "confirmSavePatient": "¿Está seguro de que desea guardar los datos del paciente?",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar"
+      },
+      "notifications": {
+        "close": "Cerrar"
+      }
+    }
+  },
+  "home": {
+    "aboutUs": {
+      "title": "Sobre Nosotros",
+      "history": {
+        "title": "Nuestra Historia",
+        "description": "La Clínica CRZ nació en 2024 del sueño compartido de cuatro profesionales de la salud mental comprometidos con transformar la atención psicológica y psiquiátrica en nuestra comunidad."
+      },
+      "mission": {
+        "title": "Nuestra Misión",
+        "description": "Creemos que la salud mental es fundamental para una vida plena. Nos dedicamos a proporcionar atención integral, personalizada y basada en evidencia científica."
+      }
+    },
+    "values": {
+      "title": "Nuestros Valores",
+      "empathy": {
+        "title": "Empatía",
+        "description": "Comprendemos que cada historia es única y merece ser escuchada con respeto y compasión."
+      },
+      "excellence": {
+        "title": "Excelencia",
+        "description": "Mantenemos los más altos estándares profesionales en todos nuestros servicios."
+      },
+      "innovation": {
+        "title": "Innovación",
+        "description": "Incorporamos las últimas técnicas y enfoques terapéuticos respaldados por la ciencia."
+      },
+      "confidentiality": {
+        "title": "Confidencialidad",
+        "description": "Garantizamos la privacidad y seguridad de cada paciente en todo momento."
+      },
+      "accessibility": {
+        "title": "Accesibilidad",
+        "description": "Trabajamos para hacer que la salud mental sea accesible para todas las personas."
+      }
+    },
+    "team": {
+      "title": "Nuestro Equipo Fundador",
+      "members": {
+        "francisco": {
+          "name": "Dr. Francisco Baghdadi",
+          "role": "Director Médico",
+          "description": "Psiquiatra con más de 15 años de experiencia en trastornos del estado de ánimo y ansiedad."
+        },
+        "nicolas": {
+          "name": "Dr. Nicolas Al-Masri",
+          "role": "Coordinador de Area Administrativa",
+          "description": "Psicólogo clínico especialista en terapia cognitivo-conductual y terapia de pareja."
+        },
+        "malena": {
+          "name": "Dra. Malena Haddad",
+          "role": "Coordinadora de Area Clinica",
+          "description": "Psicóloga infantil y adolescente con enfoque en terapia familiar sistémica."
+        },
+        "lara": {
+          "name": "Dra. Lara Al-Fayed",
+          "role": "Coordinadora de Investigación",
+          "description": "Neuropsicóloga clínica especializada en evaluación cognitiva y rehabilitación."
+        }
+      }
+    },
+    "services": {
+      "title": "Nuestros Servicios",
+      "service1": "Consultas Psiquiátricas: Evaluación, diagnóstico y tratamiento farmacológico",
+      "service2": "Terapia Individual: Enfoque personalizado para adultos, adolescentes y niños",
+      "service3": "Terapia de Pareja y Familia: Fortalecimiento de vínculos y resolución de conflictos",
+      "service4": "Evaluaciones Neuropsicológicas: Assessments cognitivos integrales",
+      "service5": "Programas Grupales: Terapia grupal especializada por temáticas",
+      "service6": "Atención de Emergencias: Servicio de crisis las 24 horas"
+    },
+    "images": {
+      "building": "Edificio de la Clínica CRZ",
+      "team": "Equipo fundador de la Clínica CRZ"
+    },
+    "video": {
+      "title": "Lo más importante para nosotros",
+      "fallback": "Tu navegador no soporta la etiqueta de video."
+    }
+  },
+  "searchPatient": {
+    "title": "Buscar Paciente",
+    "description": "Busque y seleccione un paciente para acceder a sus datos e historia clínica",
+    "form": {
+      "patient": "Paciente",
+      "placeholders": {
+        "search": "Ingrese nombre, apellido o DNI...",
+        "yearFrom": "AAAA (desde)",
+        "yearTo": "AAAA (hasta)",
+        "diagnosis": "Ingrese diagnóstico",
+        "professional": "Ingrese nombre del profesional...",
+        "medication": "Ingrese nombre del medicamento..."
+      },
+      "advancedFilters": "Filtros Avanzados",
+      "hideFilters": "Ocultar filtros avanzados",
+      "gender": {
+        "label": "Género Paciente",
+        "female": "Femenino",
+        "male": "Masculino",
+        "other": "Otro"
+      },
+      "yearOfAdmission": "Año Ingreso Paciente",
+      "diagnosis": "Diagnóstico del Paciente",
+      "professional": "Profesional que atendió",
+      "medication": "Medicación Asignada",
+      "searchButton": "Buscar",
+      "captchaWarning": "* Complete el captcha para poder realizar la búsqueda"
+    }
+  },
+  "login": {
+    "title": "Iniciar Sesión",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "loginButton": "Login",
+    "continueButton": "Continuar",
+    "error": {
+      "emptyFields": "ERROR: Por favor complete todos los campos."
+    },
+    "captcha": {
+      "description": "Captcha de seguridad, presione Tab para acceder."
+    }
+  },
+  "common": {
+    "back": "Volver",
+    "home": "Inicio",
+    "collapse": "Colapsar",
+    "expand": "Expandir"
+  }
+}

@@ -8,6 +8,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload 
 from datetime import datetime
 from fastapi import HTTPException
+from core.auth import get_token
 import httpx
 
 class EvolucionService:
@@ -27,7 +28,8 @@ class EvolucionService:
                     "id_usuario": id_usuario
                 }
             else:
-                response = await client.get(f'http://usuarios:8003/personal/{id_usuario}') 
+                headers = {"Authorization": f"Bearer {get_token()}"}
+                response = await client.get(f'http://usuarios:8003/personal/{id_usuario}', headers=headers) 
                 if response.status_code != 200:
                     raise ValueError(response.json()['detail'])
                 r = response.json()

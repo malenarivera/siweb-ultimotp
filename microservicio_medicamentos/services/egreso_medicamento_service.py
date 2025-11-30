@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from datetime import datetime
 import httpx
+from core.auth import get_token
 
 class EgresoMedicamentoService:
     @staticmethod
@@ -20,7 +21,8 @@ class EgresoMedicamentoService:
     @staticmethod
     async def buscar_datos_profesional(id_profesional: int):
         async with httpx.AsyncClient() as client:
-            response = await client.get(f'http://usuarios:8003/personal/{id_profesional}')
+            headers = {"Authorization": f"Bearer {get_token()}"}
+            response = await client.get(f'http://usuarios:8003/personal/{id_profesional}', headers=headers)
             if response.status_code != 200:
                 raise ValueError(response.json()['detail'])
             r = response.json()

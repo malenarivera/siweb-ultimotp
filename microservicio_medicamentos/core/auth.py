@@ -166,3 +166,5 @@ def verify_role(rol_requerido: str):
         return token_payload
     return check_role
 
+def get_token():
+    return token
