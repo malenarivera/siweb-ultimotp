@@ -18,8 +18,8 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
     - name: build image
-      run:  docker build ./microservicio_usuarios/ -t laraacuna/microservicio-usuarios:latest
+      run:  docker build ./microservicio_usuarios/ -t laraacuna/microservicio_usuarios:latest
     - name: publish image
       run: |
         docker login -u laraacuna -p ${{ secrets.DOCKER_HUB_TOKEN }}
-        docker push laraacuna/microservicio-usuarios:latest
+        docker push laraacuna/microservicio_usuarios:latest
