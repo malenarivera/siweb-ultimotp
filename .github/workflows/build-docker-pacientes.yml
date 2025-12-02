@@ -1,25 +1,61 @@
-name: Crear y Publicar imagen en Docker Image, pero del MS Pacientes
+name: Crear y Publicar imagen en Docker Image, MS Pacientes
+
 on:
   push:
-    branches:
-     - main
+    branches: [ main ]
     paths:
-     - 'microservicio_pacientes/**'
-  pull_request:
-    branches:
-      - main
-    paths: 
       - 'microservicio_pacientes/**'
+      - 'TESTING/PYTEST-REST-API/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'microservicio_pacientes/**'
+      - 'TESTING/PYTEST-REST-API/**'
 
 jobs:
   publish_images:
     runs-on: ubuntu-latest
-    steps: 
-    - name: checkout
-      uses: actions/checkout@v4
-    - name: build image
-      run:  docker build ./microservicio_pacientes/ -t laraacuna/microservicio-pacientes:latest
-    - name: publish image
-      run: |
-        docker login -u laraacuna -p ${{ secrets.DOCKER_HUB_TOKEN }}
-        docker push laraacuna/microservicio-pacientes:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('TESTING/PYTEST-REST-API/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f TESTING/PYTEST-REST-API/requirements.txt ]; then
+            pip install -r TESTING/PYTEST-REST-API/requirements.txt
+          else
+            pip install pytest requests
+          fi
+
+      - name: Run pytest (test_pacientes_api.py)
+        env:
+          HEADERS_PSIQUIATRA: ${{ secrets.HEADERS_PSIQUIATRA }}
+          HEADERS_SECRETARIA: ${{ secrets.HEADERS_SECRETARIA }}
+        run: |
+          pytest -q TESTING/PYTEST-REST-API/test_pacientes_api.py
+
+      - name: Build image
+        if: ${{ success() }}
+        run: docker build ./microservicio_pacientes/ -t laraacuna/microservicio-pacientes:latest
+
+      - name: Login to Docker Hub
+        if: ${{ success() }}
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username laraacuna --password-stdin
+
+      - name: Publish image
+        if: ${{ success() }}
+        run: docker push laraacuna/microservicio-pacientes:latest
