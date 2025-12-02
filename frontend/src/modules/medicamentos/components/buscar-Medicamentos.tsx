@@ -33,7 +33,6 @@ interface FormData {
 
 type MedicationMovementFormValues = {
   id_paciente: number;
-  id_profesional: number;
   cantidad: number;
   motivo: string;
 };
@@ -107,7 +106,6 @@ export default function BuscarMedicamento({ t: propT, language: propLanguage, ch
     await registrarIngresoMedicamento({
       id_medicamento: medicamento.id_medicamento,
       id_paciente: data.id_paciente,
-      id_profesional: data.id_profesional,
       cantidad: data.cantidad,
       motivo: data.motivo,
     });
@@ -119,7 +117,6 @@ export default function BuscarMedicamento({ t: propT, language: propLanguage, ch
     await registrarEgresoMedicamento({
       id_medicamento: medicamento.id_medicamento,
       id_paciente: data.id_paciente,
-      id_profesional: data.id_profesional,
       cantidad: data.cantidad,
       motivo: data.motivo,
     });
@@ -132,7 +129,7 @@ export default function BuscarMedicamento({ t: propT, language: propLanguage, ch
     onChange: handleFormaFarmaceuticaChange,
   });
 
-  // 👉 Hook del teclado virtual
+  // Hook del teclado virtual
   const {
     showVirtualKeyboard,
     setShowVirtualKeyboard,
@@ -277,10 +274,6 @@ export default function BuscarMedicamento({ t: propT, language: propLanguage, ch
     currentOrder: order,
     sortHandler: handleSortChange
   }
-
-  const rowClickAction = (row: Medicamento) => {
-    router.push(`/medicamentos/${row.id_medicamento}`);
-  };
 
   return (
     <>
@@ -443,7 +436,6 @@ export default function BuscarMedicamento({ t: propT, language: propLanguage, ch
             className="mb-5 mt-2"
             contentConfig={tableContentConfig}
             sortConfig={tableSortConfig}
-            rowAction={rowClickAction}
             showMedicationActions={true}
             onMedicationAdd={openIngresoModal}
             onMedicationRemove={openEgresoModal}

@@ -3,7 +3,6 @@ import { BASE_URL_MEDICAMENTOS } from "@/globals/services/config";
 export interface RegistrarEgresoMedicamentoPayload {
   id_medicamento: number;
   id_paciente: number;
-  id_profesional: number;
   cantidad: number;
   motivo: string;
 }

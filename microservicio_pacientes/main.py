@@ -59,7 +59,7 @@ async def crear_paciente(input: PacienteCrear, db: AsyncSession = Depends(get_db
 
 # Nuevo endpoint GET para obtener paciente por id usuario
 @app.get("/pacientes/{id_usuario}", summary="Obtener un Paciente por su ID de Usuario", tags=["Pacientes"])
-async def get_paciente(id_usuario: int, db: AsyncSession = Depends(get_db), _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Psicologo", "Psiquiatra", "Director", "Coordinador", "Enfermero", "Paciente"])))) -> UnPacienteUsuario:
+async def get_paciente(id_usuario: int, db: AsyncSession = Depends(get_db), _token_payload: dict = Depends((verify_role_is_in(["Psicologo", "Psiquiatra", "Director", "Coordinador", "Enfermera", "Secretaria"])))) -> UnPacienteUsuario:
     return await PacienteService.get_paciente_por_id(id_usuario, db)
 
 @app.delete("/pacientes/refresh", summary="Resetear pacientes en entorno testing", include_in_schema=False, status_code=200)
@@ -117,9 +117,18 @@ async def listar_evoluciones(
     tipo: str = None,
     sort: str = "fecha_creacion",
     order: str = "desc",
-    _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Psicologo", "Psiquiatra", "Enfermera", "Coordinador", "Director"])))
+    _token_payload: dict = Depends((verify_role_is_in(["Psicologo", "Psiquiatra", "Coordinador", "Director"])))
 
 ) -> list[EvolucionCompleta]:
+    # Verificar que el paciente exista antes de listar evoluciones
+    try:
+        paciente = await PacienteService.get_paciente_por_id(id_usuario, db)
+    except HTTPException:
+        # Propagar HTTPException lanzada por el servicio (por ejemplo 404)
+        raise
+    if paciente is None:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
     evoluciones = await EvolucionService.listar_evoluciones(
         id_usuario,
         db,
@@ -139,13 +148,23 @@ async def obtener_evolucion(
     id_usuario: int,
     id_evolucion: int,
     db: AsyncSession = Depends(get_db),
-    _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Psicologo", "Psiquiatra", "Enfermera", "Coordinador", "Director"])))
+    _token_payload: dict = Depends((verify_role_is_in(["Psicologo", "Psiquiatra", "Coordinador", "Director"])))
 ) -> EvolucionCompleta:
+    # Verificar que el paciente exista y devolver detalle claro si no
+    try:
+        paciente = await PacienteService.get_paciente_por_id(id_usuario, db)
+    except HTTPException:
+        raise
+    if paciente is None:
+        raise HTTPException(status_code=404, detail=f"Paciente {id_usuario} no encontrado")
+
     evolucion = await EvolucionService.obtener_evolucion(
         id_usuario,
         id_evolucion,
         db
     )
+    if evolucion is None:
+        raise HTTPException(status_code=404, detail=f"Evolución {id_evolucion} no encontrada para el paciente {id_usuario}")
     return evolucion
 
 @app.get("/pacientes/{id_usuario}/sots", summary="Listar SOTs de un paciente", tags=["SOT"])
@@ -157,8 +176,17 @@ async def listar_sots(
     fromDate: datetime = None,
     toDate: datetime = None,
     order: str = "desc",
-    _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Psicologo", "Psiquiatra", "Enfermera", "Coordinador", "Director"])))
+    _token_payload: dict = Depends((verify_role_is_in(["Psicologo", "Psiquiatra", "Coordinador", "Director"])))
 ) -> list[SotCompleta]:
+    # Verificar que el paciente exista antes de listar SOTs
+    try:
+        paciente = await PacienteService.get_paciente_por_id(id_usuario, db)
+    except HTTPException:
+        # Propagar HTTPException lanzada por el servicio (por ejemplo 404)
+        raise
+    if paciente is None:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
     sots = await SotService.listar_sots(
         id_usuario,
         db,
@@ -216,7 +244,7 @@ from typing import List as _List
 async def crear_evoluciones_grupales(
     input: EvolucionGrupalCrear,
     db: AsyncSession = Depends(get_db),
-    _token_payload: dict = Depends(verify_role("Psicologo"))
+    _token_payload: dict = Depends(verify_role_is_in(["Psicologo", "Psiquiatra"]))
 ):
     
     resp = await EvolucionService.crear_evoluciones_grupales(input, db, get_user_id_authless(_token_payload))
@@ -230,6 +258,13 @@ async def actualizar_sot(
     db: AsyncSession = Depends(get_db),
     _token_payload: dict = Depends((verify_role_is_in(["Psicologo", "Psiquiatra", "Director"])))
 ):
+    # Verificar que el paciente exista antes de actualizar el SOT
+    try:
+        paciente = await PacienteService.get_paciente_por_id(id_usuario, db)
+    except HTTPException:
+        raise
+    if paciente is None:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
     sot = await SotService.actualizar_sot(id_usuario, id_sot, input, db, get_user_id_authless(_token_payload))
     return sot
 
@@ -247,7 +282,7 @@ async def buscar_pacientes(
     page: int = 1,
     order: str = "asc",
     sort: str | None = None,
-    _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Psicologo", "Psiquiatra", "Enfermera", "Coordinador", "Director"])))
+    _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Psicologo", "Psiquiatra", "Coordinador", "Director"])))
 ) -> ResultadoBusqueda:
     pacientes = await PacienteService.buscar_pacientes(
         db=db,

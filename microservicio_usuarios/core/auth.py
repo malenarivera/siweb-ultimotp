@@ -43,6 +43,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) 
     Retorna el payload del token si es válido.
     """
     try:
+        global token
         token = credentials.credentials
         
         # 1. Obtener el header del token para extraer el kid

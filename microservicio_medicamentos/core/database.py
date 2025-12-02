@@ -38,9 +38,10 @@ async def create_database_if_not_exists():
             await conn.execute(text(f'CREATE DATABASE "{DB_NAME}"'))
             print(f"✅ Database '{DB_NAME}' created!")
         else:
-            await conn.execute(text(f'DROP DATABASE "{DB_NAME}"'))
-            await conn.execute(text(f'CREATE DATABASE "{DB_NAME}"'))
-            print(f"⚠️ Database '{DB_NAME}' already exists, dropping and creating.")
+            # No borrar la base de datos si ya existe para preservar los datos
+            # await conn.execute(text(f'DROP DATABASE "{DB_NAME}"'))
+            # await conn.execute(text(f'CREATE DATABASE "{DB_NAME}"'))
+            print(f"⚠️ Database '{DB_NAME}' already exists.")
 
     await admin_engine.dispose()
 

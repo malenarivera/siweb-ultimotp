@@ -18,7 +18,7 @@ import NotificationToast from "@/globals/components/moleculas/NotificationToast"
 interface FormData {
   dni: string;
   fechaIngreso: string;
-  fehcaNacimiento: string;
+  fechaNacimiento: string;
   genero: string;
   nombres: string;
   apellido: string;
@@ -52,7 +52,7 @@ export default function RegistrarPaciente({ t: propT, language: propLanguage, ch
   const [formData, setFormData] = useState({
     dni: "",
     fechaIngreso: new Date().toISOString().slice(0, 10), // Fecha de hoy por defecto
-    fehcaNacimiento: new Date().toISOString().slice(0, 10),
+    fechaNacimiento: new Date().toISOString().slice(0, 10),
     genero: "",
     nombres: "",
     apellido: "",
@@ -239,7 +239,7 @@ const handleConfirmarGuardado = async () => {
     setFormData({
       dni: "",
       fechaIngreso: new Date().toISOString().slice(0, 10),
-      fehcaNacimiento: new Date().toISOString().slice(0, 10),
+      fechaNacimiento: new Date().toISOString().slice(0, 10),
       genero: "",
       nombres: "",
       apellido: "",
@@ -431,13 +431,13 @@ const handleConfirmarGuardado = async () => {
                           id="fechaNacimiento"
                           name="fechaNacimiento"
                           label="Fecha Nacimiento"
-                          value={formData.fehcaNacimiento}
+                          value={formData.fechaNacimiento}
                           onChange={handleInputChange}
                           placeholder={t('registerPatient.form.placeholders.enterBirthDate')}
                           required
+                          onKeyboardIconClick={() => openKeyboardForField('fechaNacimiento')}
                           showKeyboardIcon={false}
                           isFocused={focusedFields.has('fechaNacimiento')}
-                          error={validationErrors.includes('El campo Fecha Nacimiento es obligatorio') ? 'El campo Fecha Nacimiento es obligatorio' : undefined}
                           helpText={t('registerPatient.form.messages.requiredField')}
                           width="half"
                         />

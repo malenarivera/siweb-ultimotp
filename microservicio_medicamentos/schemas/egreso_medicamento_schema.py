@@ -6,7 +6,6 @@ class EgresoMedicamentoCrear(BaseModel):
     id_medicamento: int
     id_paciente: int | None = None
     id_receta: int | None = None
-    id_profesional: int
     cantidad: int
     motivo: str
 

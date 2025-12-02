@@ -64,7 +64,7 @@ async def buscar_personal(
     limit: int = 20,
     offset: int = 0,
     sortBy: OrdenarPor | None = None,
-    _token_payload: dict = Depends((verify_role_is_in(["Coordinador", "Director"])))
+    _token_payload: dict = Depends((verify_role_is_in(["Coordinador", "Director", "Psiquiatra", "Enfermera"])))
 ) -> list[BusquedaPersonal]:
     personal = await ProfesionalService.buscar_profesional(
         db=db,
@@ -94,7 +94,7 @@ async def crear_usuario(input: CargarUsuarioBase, db:AsyncSession = Depends(get_
     return {"id_usuario": id}
 
 @app.get("/personal/usuario_base/{id_usuario}", include_in_schema=False, status_code=200)
-async def obtener_usuario(id_usuario: int, db:AsyncSession = Depends(get_db), _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Director", "Psiquiatra", "Psicologo", "Coordinador", "Enfermero", "Paciente"])))) -> UnUsuario:
+async def obtener_usuario(id_usuario: int, db:AsyncSession = Depends(get_db), _token_payload: dict = Depends((verify_role_is_in(["Secretaria", "Director", "Psiquiatra", "Psicologo", "Coordinador", "Enfermera", "Paciente"])))) -> UnUsuario:
     try:
         return await UsuarioService.obtener_usuario(db, id_usuario)
     except Exception as e:
@@ -114,7 +114,7 @@ async def desactivar_usuario(id_usuario: int, input: DesactivarUsuarioBase, db:A
 
 
 @app.get("/personal/{id_usuario}", summary="Obtener Personal por ID", tags=["Personal"], status_code=200)
-async def obtener_personal(id_usuario: int, db: AsyncSession = Depends(get_db), _token_payload: dict = Depends((verify_role_is_in(["Coordinador", "Director", "Psicologo", "Psiquiatra", "Enfermero", "Secretaria"])))) -> UnPersonal:
+async def obtener_personal(id_usuario: int, db: AsyncSession = Depends(get_db), _token_payload: dict = Depends((verify_role_is_in(["Coordinador", "Director", "Psicologo", "Psiquiatra", "Enfermera", "Secretaria"])))) -> UnPersonal:
     try:
         personal = await ProfesionalService.obtener_personal(id_usuario, db)
         return personal

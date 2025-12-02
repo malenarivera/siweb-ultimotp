@@ -12,7 +12,8 @@ class EgresoMedicamentoService:
     @staticmethod
     async def buscar_datos_paciente(id_paciente: int):
         async with httpx.AsyncClient() as client:
-            response = await client.get(f'http://pacientes:8000/pacientes/{id_paciente}')
+            headers = {"Authorization": f"Bearer {get_token()}"}
+            response = await client.get(f'http://pacientes:8000/pacientes/{id_paciente}', headers=headers)
             if response.status_code != 200:
                 raise ValueError(response.json()['detail'])
             r = response.json()
@@ -29,7 +30,7 @@ class EgresoMedicamentoService:
             return r
 
     @staticmethod
-    async def registrar_egreso_medicamento(input: EgresoMedicamentoCrear, db: AsyncSession) -> EgresoMedicamentoCreado:
+    async def registrar_egreso_medicamento(input: EgresoMedicamentoCrear, db: AsyncSession, id_profesional: int) -> EgresoMedicamentoCreado:
         # Verificar que el paciente existe (si se proporciona)
         if input.id_paciente is not None:
             try:
@@ -39,9 +40,9 @@ class EgresoMedicamentoService:
         
         # Verificar que el profesional existe
         try:
-            await EgresoMedicamentoService.buscar_datos_profesional(input.id_profesional)
+            await EgresoMedicamentoService.buscar_datos_profesional(id_profesional)
         except ValueError as e:
-            raise ValueError(f"El profesional con id {input.id_profesional} no existe")
+            raise ValueError(f"El profesional con id {id_profesional} no existe")
         
         # Verificar que el medicamento existe
         result = await db.execute(select(Medicamento).where(Medicamento.id_medicamento == input.id_medicamento))
@@ -62,6 +63,7 @@ class EgresoMedicamentoService:
         
         # Registrar el egreso
         egreso_medicamento_data = input.dict()
+        egreso_medicamento_data["id_profesional"] = id_profesional
         egreso_medicamento = Egreso_Medicamento(**egreso_medicamento_data)
         db.add(egreso_medicamento)
         

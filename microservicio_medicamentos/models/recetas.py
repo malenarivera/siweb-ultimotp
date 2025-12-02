@@ -8,8 +8,8 @@ class Receta(Base):
 
      # Claves primarias y foráneas
     id_receta: Mapped[int] = mapped_column(primary_key=True, unique=True, nullable=False)
-    id_evolucion: Mapped[int] = mapped_column(unique=True, nullable=False)
-    id_medicamento: Mapped[int] = mapped_column(unique=True, nullable=False)
+    id_evolucion: Mapped[int] = mapped_column(nullable=False)
+    id_medicamento: Mapped[int] = mapped_column(nullable=False)
     id_profesional: Mapped[int] = mapped_column(nullable=False)
     # Datos recetas
     estado: Mapped[str] = mapped_column(String(50), nullable=False, default='Asignada')
