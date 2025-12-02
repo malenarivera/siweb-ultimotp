@@ -24,10 +24,6 @@ export function MedicationIntakeModal({ medicamento, onClose, onSubmit }: Medica
       setError("Por favor ingresa un ID de paciente válido")
       return
     }
-    if (data.id_profesional <= 0) {
-      setError("Por favor ingresa un ID de profesional válido")
-      return
-    }
     if (data.cantidad <= 0) {
       setError("La cantidad debe ser mayor a 0")
       return

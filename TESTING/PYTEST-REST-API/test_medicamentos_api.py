@@ -5,10 +5,13 @@ from typing import Any, Dict
 ENDPOINT_MEDICAMENTOS = "http://localhost:8002"
 ENDPOINT_USUARIOS = "http://localhost:8003"
 
+HEADERS_ENFERMERO = {"Authorization": f"Bearer {'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlU1cDB1emxSdXM0b1ZRM1VMMzQzUiJ9.eyJodHRwczovL2Nyei13ZWIuY29tL3JvbGVzIjpbIkVuZmVybWVyYSJdLCJpc3MiOiJodHRwczovL2Rldi0wdm1rNzgwMGh1c3V2OHJ0LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2IiwiYXVkIjpbImh0dHBzOi8vY3J6LmNvbSIsImh0dHBzOi8vZGV2LTB2bWs3ODAwaHVzdXY4cnQudXMuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTc2NDYyNjU1NywiZXhwIjoxNzY0NzEyOTU3LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwiYXpwIjoiU1VWczAzTjFDR3hjRUpzYlo4Z1dpZWtNck1hTWRRWUsifQ.UHm1CKn6IQoJwPBiL498ofCrGKzwmYBY53gJ0b_fRw-Hhvs7bgUUTOkulxsUbNWBzrvds9qx6JL8pMuB5-T0qOA_PfYBrzzvw90sCsgcagQB9Urw0m7ZmDLkrfjitvU32MSz7pX8zg2fHhEvhEtPeO_GXtjMBjMZmYT6OzhZ-cwjJCg7eqxqJj2dyzubEuiNoP4jCPqu0wEPjOj0etR90hEpyQsp7h0PP5-clQEnYm7SdrtlIlSc-Lo-fWGqYIuGE-6EEZ47i-nBTWudmC4zOHe3dA8O5xfXsDHh4aGQCGoIr-h2DXGZR1Ff2uA0GQueWJmrARQkMe2q3hfxor9GpA'}"}
+
 # Helpers
 def get_medicamentos_resp():
 	"""Helper: realiza GET a /medicamentos/obtenerMedicamentos y devuelve el objeto Response."""
 	return requests.get(f"{ENDPOINT_MEDICAMENTOS}/medicamentos/obtenerMedicamentos", headers=HEADERS_ENFERMERO)
+HEADERS_PSIQUIATRA = {"Authorization": f"Bearer {'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlU1cDB1emxSdXM0b1ZRM1VMMzQzUiJ9.eyJodHRwczovL2Nyei13ZWIuY29tL3JvbGVzIjpbIlBzaXF1aWF0cmEiXSwiaXNzIjoiaHR0cHM6Ly9kZXYtMHZtazc4MDBodXN1djhydC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NyIsImF1ZCI6WyJodHRwczovL2Nyei5jb20iLCJodHRwczovL2Rldi0wdm1rNzgwMGh1c3V2OHJ0LnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE3NjQ2MjgxMjgsImV4cCI6MTc2NDcxNDUyOCwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImF6cCI6IlNVVnMwM04xQ0d4Y0VKc2JaOGdXaWVrTXJNYU1kUVlLIn0.Hqcofz2njLsi3_MqcmIsuMS_nHlQUZXOaj-D1TI6gGJZA15YH72hUdABH2QHu1F5cwlMiFQJPIMRftbjxdBhDvV0TRWryzeF2DX7uYQ8jlpciBUXqifrRsECp9L90VVe3Jisn-bPUX50ITn6gso4yYbVH6LcOMlWYVkHbAX75xoxuO7OGTAVSu4_68GhhbwJGT0ApT61K6hJ4z9wKEEOedk4ezxymNpFzRdF9AjnJoiQp2LSPQI7XVnQPVe9dhtGWc4zG1SofSMUndSOZSiWJwAQD-ktZS5UhmkU8JjiEoGqw46NQIWWZ0kX8jSHh7GCnrRe9Oigs-zKTRFcSqTL8A'}"}
 
 def get_personal_list():
 	"""Helper: devuelve la lista de personal (profesionales) desde el servicio de usuarios, o None si hay error."""
@@ -166,7 +169,6 @@ def test_can_post_egreso():
 	ingreso_payload = {
 		"id_medicamento": 1,
 		"id_paciente": 9,
-		"id_profesional": 7,
 		"cantidad": 5,
 		"motivo": "Ingreso para prueba",
 		"fecha_creacion": "2023-07-09T12:00:00"
@@ -182,7 +184,6 @@ def test_can_post_egreso():
 	egreso_payload = {
 		"id_medicamento": 1,
 		"id_paciente": 9,
-		"id_profesional": 7,
 		"cantidad": 5,
 		"motivo": "Egreso para prueba",
 		"id_receta": 1,
@@ -197,7 +198,8 @@ def test_can_post_egreso():
 	# Comprobaciones básicas sobre la respuesta
 	assert egreso_data.get("id_medicamento") == egreso_payload["id_medicamento"]
 	assert egreso_data.get("id_paciente") == egreso_payload["id_paciente"]
-	assert egreso_data.get("id_profesional") == egreso_payload["id_profesional"]
+	# El id_profesional viene del token (auth0|6 = id 6)
+	assert egreso_data.get("id_profesional") == 6
 	assert egreso_data.get("cantidad") == egreso_payload["cantidad"]
 
 def test_cant_post_egreso_out_of_stock():
@@ -205,7 +207,6 @@ def test_cant_post_egreso_out_of_stock():
 	ingreso_payload = {
 		"id_medicamento": 1,
 		"id_paciente": 9,
-		"id_profesional": 7,
 		"cantidad": 5,
 		"motivo": "Ingreso para prueba",
 		"fecha_creacion": "2023-07-09T12:00:00"
@@ -221,7 +222,6 @@ def test_cant_post_egreso_out_of_stock():
 	egreso_payload = {
 		"id_medicamento": 1,
 		"id_paciente": 9,
-		"id_profesional": 7,
 		"cantidad": 700, # Más que el stock disponible
 		"motivo": "Egreso para prueba",
 		"id_receta": 1,
@@ -241,7 +241,6 @@ def test_can_post_ingreso():
 	payload = {
 		"id_medicamento": 1,
 		"id_paciente": 9,
-		"id_profesional": 7,
 		"cantidad": 10,
 		"motivo": "string"
 	}
@@ -259,14 +258,14 @@ def test_can_post_ingreso():
 	# Verificar que los ids coincidan
 	assert int(data.get("id_medicamento")) == int(payload["id_medicamento"]) 
 	assert int(data.get("id_paciente")) == int(payload["id_paciente"]) 
-	assert int(data.get("id_profesional")) == int(payload["id_profesional"]) 
+	# El id_profesional viene del token (auth0|6 = id 6)
+	assert int(data.get("id_profesional")) == 6 
 
 def test_cant_post_ingreso_wrong_ids():
-	"""POST /medicamentos/registrarIngreso debe aceptar un ingreso y devolver 200 con los campos esperados."""
+	"""POST /medicamentos/registrarIngreso debe devolver 400 con IDs inválidos."""
 	payload = {
 		"id_medicamento": -99,
 		"id_paciente": -99,
-		"id_profesional": -99,
 		"cantidad": 10,
 		"motivo": "string"
 	}

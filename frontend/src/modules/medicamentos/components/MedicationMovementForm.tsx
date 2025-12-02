@@ -26,12 +26,11 @@ export function MedicationMovementForm({
 }: MedicationMovementFormProps) {
   const [formData, setFormData] = useState<MedicationMovementData>({
     id_paciente: 0,
-    id_profesional: 0,
     cantidad: 0,
     motivo: "",
   })
 
-  const numericFields = ["id_paciente", "id_profesional", "cantidad"]
+  const numericFields = ["id_paciente", "cantidad"]
 
   const {
     showVirtualKeyboard,
@@ -54,7 +53,7 @@ export function MedicationMovementForm({
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "id_paciente" || name === "cantidad" || name === "id_profesional"
+        name === "id_paciente" || name === "cantidad"
           ? Number.parseInt(value) || 0
           : value,
     }))
@@ -107,21 +106,21 @@ export function MedicationMovementForm({
             </div>
           </div>
 
-          {/* ID Profesional */}
+          {/* Cantidad */}
           <div>
-            <label htmlFor="id_profesional" className="block text-sm font-semibold text-gray-700 mb-2">
-              ID Profesional
+            <label htmlFor="cantidad" className="block text-sm font-semibold text-gray-700 mb-2">
+              Cantidad
             </label>
             <div className="flex items-center">
               <input
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                id="id_profesional"
-                name="id_profesional"
-                value={formData.id_profesional || ""}
+                id="cantidad"
+                name="cantidad"
+                value={formData.cantidad || ""}
                 onChange={handleChange}
-                placeholder="3"
+                placeholder="5"
                 disabled={isDisabled}
                 className={
                   "w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" +
@@ -129,34 +128,8 @@ export function MedicationMovementForm({
                 }
                 required
               />
-              {!isDisabled && <KeyboardIcon fieldName="id_profesional" />}
+              {!isDisabled && <KeyboardIcon fieldName="cantidad" />}
             </div>
-          </div>
-        </div>
-
-        {/* Cantidad */}
-        <div>
-          <label htmlFor="cantidad" className="block text-sm font-semibold text-gray-700 mb-2">
-            Cantidad
-          </label>
-          <div className="flex items-center">
-            <input
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              id="cantidad"
-              name="cantidad"
-              value={formData.cantidad || ""}
-              onChange={handleChange}
-              placeholder="5"
-              disabled={isDisabled}
-              className={
-                "w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors" +
-                (isDisabled ? " disabled:bg-gray-200 disabled:cursor-not-allowed" : "")
-              }
-              required
-            />
-            {!isDisabled && <KeyboardIcon fieldName="cantidad" />}
           </div>
         </div>
 
@@ -165,20 +138,27 @@ export function MedicationMovementForm({
           <label htmlFor="motivo" className="block text-sm font-semibold text-gray-700 mb-2">
             Motivo
           </label>
-          <textarea
-            id="motivo"
-            name="motivo"
-            value={formData.motivo}
-            onChange={handleChange}
-            placeholder="Describe el motivo..."
-            rows={4}
-            disabled={isDisabled}
-            className={
-              "w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors resize-none" +
-              (isDisabled ? " disabled:bg-gray-200 disabled:cursor-not-allowed" : "")
-            }
-            required
-          />
+          <div className="flex items-start">
+            <textarea
+              id="motivo"
+              name="motivo"
+              value={formData.motivo}
+              onChange={handleChange}
+              placeholder="Describe el motivo..."
+              rows={4}
+              disabled={isDisabled}
+              className={
+                "w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors resize-none" +
+                (isDisabled ? " disabled:bg-gray-200 disabled:cursor-not-allowed" : "")
+              }
+              required
+            />
+            {!isDisabled && (
+              <div className="ml-2 pt-2">
+                <KeyboardIcon fieldName="motivo" />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Error Message */}

@@ -10,7 +10,7 @@ from services.ingreso_medicamento_service import IngresoMedicamentoService
 from services.medicamento_service import MedicamentoService
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_db, init_db, close_db
-from core.auth import verify_role
+from core.auth import verify_role, verify_role_is_in, get_user_id_authless
 
 app = FastAPI(
     title="API Medicamentos",
@@ -35,7 +35,11 @@ async def shutdown_event():
 
 
 @app.post("/medicamentos/receta/", summary="Cargar una Receta", tags=["Recetas"], status_code=status.HTTP_201_CREATED)
-async def crear_receta(input: RecetaCrear, db: AsyncSession = Depends(get_db)) -> RecetaCreada:
+async def crear_receta(
+    input: RecetaCrear, 
+    db: AsyncSession = Depends(get_db),
+    _token_payload: dict = Depends(verify_role("Psiquiatra"))  # Solo psiquiatras pueden crear recetas
+) -> RecetaCreada:
     try:
         receta = await RecetaService.crear_receta(input, db)
         return receta
@@ -48,7 +52,8 @@ async def buscar_recetas_por_profesional(
     idProfesional: int = Query(..., description="ID del profesional"),
     cantidadATraer: int = Query(..., description="Cantidad de recetas a traer"),
     estado: str | None = Query(None, description="Estado de la receta (opcional)"),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    _token_payload: dict = Depends(verify_role_is_in(["Psicologo", "Psiquiatra", "Director", "Coordinador", "Enfermera"]))
 ) -> list[RecetaLeer]:
     try:
         recetas = await RecetaService.buscarReceta_por_profesional(
@@ -66,7 +71,8 @@ async def buscar_recetas_por_profesional(
 async def actualizar_estado_receta(
     id_receta: int,
     estado_data: EstadoRecetaActualizar,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    _token_payload: dict = Depends(verify_role("Psiquiatra"))  # Solo psiquiatras pueden actualizar recetas
 ) -> RecetaLeer:
     try:
         receta = await RecetaService.actualizar_estado_receta(
@@ -82,9 +88,13 @@ async def actualizar_estado_receta(
 
 
 @app.post("/medicamentos/registrarEgreso", summary="Registrar egreso de medicamento", tags=["Egresos Medicamentos"])
-async def registrar_egreso_medicamento(input: EgresoMedicamentoCrear, db: AsyncSession = Depends(get_db)) -> EgresoMedicamentoCreado:
+async def registrar_egreso_medicamento(
+    input: EgresoMedicamentoCrear, 
+    db: AsyncSession = Depends(get_db),
+    _token_payload: dict = Depends(verify_role("Enfermera"))  # Solo enfermeras pueden registrar egresos
+) -> EgresoMedicamentoCreado:
     try:
-        egreso_medicamento = await EgresoMedicamentoService.registrar_egreso_medicamento(input, db)
+        egreso_medicamento = await EgresoMedicamentoService.registrar_egreso_medicamento(input, db, get_user_id_authless(_token_payload))
         return egreso_medicamento
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -98,7 +108,7 @@ async def registrar_ingreso_medicamento(
     _token_payload: dict = Depends(verify_role("Enfermera"))  # Solo enfermeras pueden registrar ingresos
 ) -> IngresoMedicamentoCreado:
     try:
-        ingreso_medicamento = await IngresoMedicamentoService.registrar_ingreso_medicamento(input, db)
+        ingreso_medicamento = await IngresoMedicamentoService.registrar_ingreso_medicamento(input, db, get_user_id_authless(_token_payload))
         return ingreso_medicamento
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -113,7 +123,8 @@ async def obtener_medicamentos(
     forma_farmaceutica: str | None = Query(None, description="Filtrar por forma farmacéutica"),
     presentacion: str | None = Query(None, description="Filtrar por presentación"),
     limit: int = Query(20, description="Cantidad de resultados a devolver"),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    _token_payload: dict = Depends(verify_role_is_in(["Psicologo", "Psiquiatra", "Director", "Coordinador", "Enfermera"]))
 ) -> ResultadoBusquedaMedicamentos:
     try:
         # Crear objeto de filtros

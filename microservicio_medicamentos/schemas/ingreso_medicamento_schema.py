@@ -5,7 +5,6 @@ from datetime import datetime
 class IngresoMedicamentoCrear(BaseModel):
     id_medicamento: int
     id_paciente: int
-    id_profesional: int
     cantidad: int
     motivo: str
 

@@ -5,7 +5,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt
 import httpx
 from functools import lru_cache
-from typing import Optional
+from typing import Optional, List
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 
@@ -49,6 +49,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) 
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="No se proporcionaron credenciales"
             )
+        global token
         token = credentials.credentials
         
         # 1. Obtener el header del token para extraer el kid
@@ -152,6 +153,16 @@ def get_user_id(payload: dict) -> Optional[str]:
     """Extrae el ID del usuario (sub) del payload del token"""
     return payload.get("sub")
 
+def get_user_id_authless(payload: dict) -> Optional[str]:
+    # Devuelve el ID sin el auth| (se corresponde con el ID de la BD)
+    id = get_user_id(payload)
+    if not id:
+        raise HTTPException(
+            status_code=404,
+            detail="No se reconoce el ID del usuario"
+        )
+    return int(id[6:])
+
 def verify_role(rol_requerido: str):
     """
     Dependencia de FastAPI que verifica que el usuario tenga el rol requerido
@@ -168,3 +179,17 @@ def verify_role(rol_requerido: str):
 
 def get_token():
     return token
+def verify_role_is_in(rol_requerido: List[str]):
+    """
+    Dependencia de FastAPI que verifica que el usuario tenga alguno de los roles requeridos
+    """
+    def check_role(token_payload: dict = Depends(verify_token)):
+        rol_usuario = get_user_rol(token_payload)
+        if rol_usuario not in rol_requerido:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Acceso denegado. Se requiere alguno de los siguientes roles: {', '.join(rol_requerido)}, pero el usuario tiene rol: {rol_usuario}"
+            )
+        return token_payload
+    return check_role
+
