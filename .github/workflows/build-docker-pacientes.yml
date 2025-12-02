@@ -1,5 +1,3 @@
-# CI: Ejecutar pytest para TESTING/PYTEST-REST-API/test_pacientes_api.py usando secrets,
-# luego construir y publicar la imagen Docker del microservicio_pacientes si los tests pasan.
 name: Crear y Publicar imagen en Docker Image, MS Pacientes
 
 on:
@@ -43,33 +41,6 @@ jobs:
             pip install pytest requests
           fi
 
-      - name: Create minimal conftest for tests
-        run: |
-          mkdir -p TESTING/PYTEST-REST-API
-          cat > TESTING/PYTEST-REST-API/conftest.py <<'PY'
-import os, json, ast, builtins, pytest
-
-def _parse(raw):
-    if not raw:
-        return None
-    try:
-        return json.loads(raw)
-    except Exception:
-        pass
-    try:
-        return ast.literal_eval(raw)
-    except Exception:
-        return None
-
-for env in ("HEADERS_PSIQUIATRA", "HEADERS_SECRETARIA"):
-    raw = os.getenv(env)
-    if raw:
-        parsed = _parse(raw)
-        if parsed is None:
-            pytest.exit(f"{env} presente pero inválido o no parseable.")
-        setattr(builtins, env, parsed)
-PY
-
       - name: Run pytest (test_pacientes_api.py)
         env:
           HEADERS_PSIQUIATRA: ${{ secrets.HEADERS_PSIQUIATRA }}
@@ -78,13 +49,13 @@ PY
           pytest -q TESTING/PYTEST-REST-API/test_pacientes_api.py
 
       - name: Build image
-        if: success()
+        if: ${{ success() }}
         run: docker build ./microservicio_pacientes/ -t laraacuna/microservicio-pacientes:latest
 
       - name: Login to Docker Hub
-        if: success()
+        if: ${{ success() }}
         run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username laraacuna --password-stdin
 
       - name: Publish image
-        if: success()
+        if: ${{ success() }}
         run: docker push laraacuna/microservicio-pacientes:latest
